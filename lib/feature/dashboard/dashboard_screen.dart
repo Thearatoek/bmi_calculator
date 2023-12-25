@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:circular/circular.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +55,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double age = 0;
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  final _isvisible = false;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BlocBloc, BlocState>(
       listener: (context, state) {
+        if (state is LoginErrorState) {
+          debugPrint("hello=========================");
+          snackBar.show(context);
+
+          Future.delayed(const Duration(seconds: 2), () {
+            snackBar.remove();
+          });
+        }
         if (state is BMICalculateState) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -183,13 +191,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     context: context,
                                     actions: [
                                       GestureDetector(
-                                        onTap: () async {
-                                          setState(() {});
-                                          await Future.delayed(const Duration(seconds: 2), () {
-                                            return const Center(
-                                              child: Text('Helelo'),
-                                            );
-                                          });
+                                        onTap: () {
+                                          transferdata.add(SignOutEvent());
                                         },
                                         child: Container(
                                           height: 40,
@@ -248,8 +251,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   title: InkWell(
                     onTap: () {
                       if (_image != null) {
-                        // uploadImage(File(_image!.path), _image!.name);
-                        transferdata.add(UpdateUserProfileEvent(_image!.path));
+                        final snackBar = AnimatedSnackBar.material(
+                          'This a snackbar with info type and a very very very long text',
+                          type: AnimatedSnackBarType.info,
+                          mobileSnackBarPosition: MobileSnackBarPosition.top,
+                          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+                          snackBarStrategy: RemoveSnackBarStrategy(),
+                        );
+                        snackBar.show(context);
+
+                        Future.delayed(const Duration(seconds: 2), () {
+                          snackBar.remove();
+                        });
                       }
                     },
                     child: const Text(
@@ -294,19 +307,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      SpinBox(
-                        value: 10,
-                        onChanged: (value) {
-                          age = value;
-                          debugPrint('===============$age');
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                            labelText: 'Age',
-                            labelStyle: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 18,
-                            )),
+                      Stack(
+                        children: [
+                          SpinBox(
+                            value: 10,
+                            onChanged: (value) {
+                              age = value;
+                              debugPrint('===============$age');
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                labelText: 'Age',
+                                labelStyle: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18,
+                                )),
+                          ),
+                          Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 150,
+                              height: 60,
+                              color: Colors.transparent,
+                            ),
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 15,
@@ -441,6 +465,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  var snackBar = AnimatedSnackBar.material(
+    'This a snackbar with info type and a very very very long text',
+    type: AnimatedSnackBarType.info,
+    mobileSnackBarPosition: MobileSnackBarPosition.top,
+    desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+    snackBarStrategy: RemoveSnackBarStrategy(),
+  );
 
   Future getImageFromGallery() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);

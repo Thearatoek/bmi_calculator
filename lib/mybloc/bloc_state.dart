@@ -41,3 +41,5 @@ class SigOutState extends BlocState {}
 class DeleteState extends BlocState {}
 
 class UpdateUserProfileState extends BlocState {}
+
+class LoginErrorState extends BlocState {}

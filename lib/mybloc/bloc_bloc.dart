@@ -45,7 +45,7 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
   CollectionReference userimage = FirebaseFirestore.instance.collection('user_image');
   final _auth = FirebaseAuth.instance;
   List<UserModel> data = [];
-
+  String errorMessage = '';
 //Login
   Future<User?> _onLoginUser(LoginEvent event, emit) async {
     try {
@@ -59,16 +59,18 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
         emit(LoginState());
       }
       return user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      } else {
-        print('Error: ${e.message}');
+    } on FirebaseAuthException catch (error) {
+      print(error.code);
+      switch (error.code) {
+        case "INVALID_LOGIN_CREDENTIALS":
+          errorMessage = "Your Email and password are invalid";
+          break;
+        default:
+          errorMessage = "An undefined Error happened.";
       }
+      emit(LoginErrorState());
     }
-    return null;
+    return Future.error(errorMessage);
   }
 
 //Loading data from firebase
