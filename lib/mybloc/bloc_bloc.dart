@@ -77,10 +77,11 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
   Future<void> _onLoadingDataFirebase(RecordedEvent event, emit) async {
     try {
       final response = FirebaseFirestore.instance.collection('client').where('uid', isEqualTo: _auth.currentUser?.uid).get();
+
       await response.then((snapshot) {
         for (var document in snapshot.docs) {
           data.add(UserModel.fromJson(document.data()));
-          debugPrint(document.data().toString());
+          print(document.id);
         }
         emit(RecordedState(data));
       });
@@ -180,11 +181,23 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<void> _onDeleteData(DeleteEvent event, emit) async {
+    await deleteData(event.userId);
+  }
+
+  Future<void> deleteData(String itemId) async {
     try {
-      await collectionReference.doc('uid').delete();
-      print('Document deleted successfully');
+      // Replace 'your_collection' with the name of your collection
+      String collectionName = 'client';
+
+      // Get a reference to the document
+      DocumentReference documentReference = FirebaseFirestore.instance.collection(collectionName).doc(itemId);
+
+      // Delete the document
+      await documentReference.delete();
+
+      print('Item deleted successfully!');
     } catch (e) {
-      print('Error deleting document: $e');
+      print('Error deleting item: $e');
     }
   }
 }

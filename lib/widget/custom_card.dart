@@ -62,14 +62,17 @@ class CustomCardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                ontap();
-              },
-              child: const Icon(
-                Icons.delete,
-                size: 20,
-                color: Colors.red,
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: InkWell(
+                onTap: () {
+                  ontap();
+                },
+                child: const Icon(
+                  Icons.delete,
+                  size: 20,
+                  color: Colors.red,
+                ),
               ),
             )
           ],

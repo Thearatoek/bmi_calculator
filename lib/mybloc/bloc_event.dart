@@ -42,7 +42,10 @@ class RecordedEvent extends BlocEvent {}
 
 class SignOutEvent extends BlocEvent {}
 
-class DeleteEvent extends BlocEvent {}
+class DeleteEvent extends BlocEvent {
+  String userId;
+  DeleteEvent(this.userId);
+}
 
 class UpdateUserProfileEvent extends BlocEvent {
   final String userProfile;
