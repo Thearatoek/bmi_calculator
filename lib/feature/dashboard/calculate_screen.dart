@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:online/feature/dashboard/dashboard_screen.dart';
+import 'package:online/feature/dashboard/input_kilo_screen.dart';
+import 'package:online/widget/custome_screen.dart';
 import 'package:online/feature/login/login_screen.dart';
 import 'package:online/model/user_model.dart';
 import '../../mybloc/bloc_bloc.dart';
@@ -52,12 +53,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         } else if (state is BMIthearaState) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => BlocBloc(),
-                child: const DashboardScreen(
-                  username: 'Vanda',
-                ),
-              ),
+              builder: (context) => BlocProvider(create: (context) => BlocBloc(), child: const InputUserKiloScreen()),
             ),
           );
         }

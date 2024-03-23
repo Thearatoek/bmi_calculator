@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          backgroundColor: HexColor('#FFB80A'),
+          backgroundColor: HexColor('#50C276'),
         ),
         body: BlocConsumer<BlocBloc, BlocState>(listener: (context, state) {
           if (state is LoginState) {
@@ -77,10 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }, builder: (context, state) {
           return Container(
-            color: HexColor('#FFB80A'),
+            color: HexColor('#50C276'),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 12,
@@ -91,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
                       )
                     : const Text(
-                        "Welcome !",
+                        "Create an account !",
                         style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
                       ),
                 const SizedBox(
@@ -102,9 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         "Sign in to Continous ",
                         style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
                       )
-                    : const Text(
-                        "Please do registration!",
-                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w700),
+                    : const Center(
+                        child: Text(
+                          "Please register your account",
+                          maxLines: 2,
+                          style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w700),
+                        ),
                       ),
                 const SizedBox(
                   height: 10,
