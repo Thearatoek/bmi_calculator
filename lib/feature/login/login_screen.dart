@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool validation() {
     bool valid = isValidation = _phoneController.text != '' && _passwordController.text != '';
-    debugPrint('================$valid');
+
     return valid;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online/feature/dashboard/recommendation_screen.dart';
 import 'package:online/util/app_util.dart';
 
 class SuccessScreen extends StatefulWidget {
@@ -83,7 +84,11 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 15),
-                  child: customContainer(title, checkReccomendation(title)),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendationScreen(title)));
+                      },
+                      child: customContainer(title, checkReccomendation(title))),
                 ));
           })
         ],

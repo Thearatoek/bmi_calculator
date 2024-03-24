@@ -42,6 +42,8 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
   User? user;
   var auth = UserAuth();
   CollectionReference collectionReference = FirebaseFirestore.instance.collection('client');
+  // food collection
+  CollectionReference foodCollection = FirebaseFirestore.instance.collection('food');
   CollectionReference userimage = FirebaseFirestore.instance.collection('user_image');
   final _auth = FirebaseAuth.instance;
   List<UserModel> data = [];
@@ -132,6 +134,19 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
       } else {}
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> addFoodFireStore() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      await foodCollection.add({
+        "uid": uid,
+        "title": "Type of Diet food",
+        "subtile": "Please choose this food for eat",
+        "image": "https://cdn4.vectorstock.com/i/1000x1000/44/93/italian-cuisine-food-traditional-dishes-vector-18484493.jpg"
+      });
     }
   }
 

@@ -52,9 +52,9 @@ class _InputUserBirthDateScreenState extends State<InputUserBirthDateScreen> {
 
   double bmiCalculator(double userheight, double userweight) {
     double a = userheight / 100;
-    debugPrint("========$a");
+
     bmi = userweight / pow(a, 2);
-    debugPrint("========$bmi");
+
     return bmi;
   }
 }
