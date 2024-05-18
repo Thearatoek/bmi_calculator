@@ -23,15 +23,18 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
     }
   }
 
-  CollectionReference foodCollection = FirebaseFirestore.instance.collection('food');
+  CollectionReference foodCollection =
+      FirebaseFirestore.instance.collection('food');
   final _auth = FirebaseAuth.instance;
   Future<void> addFoodFireStore() async {
     User? user = _auth.currentUser;
     if (user != null) {
       await foodCollection.add({
         "title": "KETO",
-        "subtile": "The ketogenic (keto) diet is a high-fat, very low-carbohydrate, and moderate-protein diet.",
-        "image": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=861,h=600,fit=crop/AwvL7WbqRLHXekVz/keto-diet-foods-1-ALpX60x9bkIGbMow.webp"
+        "subtile":
+            "The ketogenic (keto) diet is a high-fat, very low-carbohydrate, and moderate-protein diet.",
+        "image":
+            "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=861,h=600,fit=crop/AwvL7WbqRLHXekVz/keto-diet-foods-1-ALpX60x9bkIGbMow.webp"
       });
     }
   }
@@ -51,16 +54,24 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
               return ListView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, index) {
-                    Map<String, dynamic> data = documents[index].data() as Map<String, dynamic>;
+                    Map<String, dynamic> data =
+                        documents[index].data() as Map<String, dynamic>;
 
                     return Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: _selectedIndex != 1
                             ? GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => PuchaseScreen(image: data['image'])));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PuchaseScreen(
+                                              image: data['image'])));
                                 },
-                                child: customeWidgetFoodContainer(image: data['image'], subtitle: data['subtile'], title: data['title']))
+                                child: customeWidgetFoodContainer(
+                                    image: data['image'],
+                                    subtitle: data['subtile'],
+                                    title: data['title']))
                             : _widgetOptions.elementAt(_selectedIndex));
                   });
             }
@@ -89,7 +100,8 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   }
 }
 
-Widget customeWidgetFoodContainer({required String title, required String subtitle, required String image}) {
+Widget customeWidgetFoodContainer(
+    {required String title, required String subtitle, required String image}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Column(
@@ -97,14 +109,18 @@ Widget customeWidgetFoodContainer({required String title, required String subtit
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         const SizedBox(
           height: 10,
         ),
         Text(
           subtitle,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black.withOpacity(0.5)),
+          style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: Colors.black.withOpacity(0.5)),
         ),
         const SizedBox(
           height: 20,
@@ -114,9 +130,9 @@ Widget customeWidgetFoodContainer({required String title, required String subtit
           height: 230,
           decoration: BoxDecoration(
               border: Border.all(width: 0.2, color: Colors.grey),
-              color: Colors.red,
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)),
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover)),
         )
       ],
     ),

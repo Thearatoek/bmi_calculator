@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online/feature/dashboard/purhcase_information.dart';
 import 'package:online/util/app_util.dart';
 
 class PuchaseScreen extends StatefulWidget {
@@ -10,7 +11,13 @@ class PuchaseScreen extends StatefulWidget {
 }
 
 class _PuchaseScreenState extends State<PuchaseScreen> {
-  final listOfInfo = ["Calories   1200 cals", "Carb   3g", "Protein   5g", "Fat   6g"];
+  final listOfInfo = [
+    "Calories   1200 cals",
+    "Carb   3g",
+    "Protein   5g",
+    "Fat   6g"
+  ];
+  late int indexClicked = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +40,10 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
               padding: const EdgeInsets.only(left: 20),
               child: Text(
                 'Since most of the fasting window occurs while you re sleeping, this IF method might be a good choice for beginners.',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black.withOpacity(0.6)),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black.withOpacity(0.6)),
               ),
             ),
             const SizedBox(
@@ -56,20 +66,46 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("1 Package: ", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black)),
-                Text("\$20.00", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: HexColor("#106D11")))
+                const Text("1 Package: ",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black)),
+                Text(
+                  "\$20.00",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: HexColor("#106D11"),
+                  ),
+                )
               ],
             ),
             const SizedBox(
               height: 30,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: HexColor("#4FC376")),
-              child: const Center(
-                child: Text("Purchase", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const PuchaseInformationScreen()));
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: HexColor("#4FC376")),
+                child: const Center(
+                  child: Text("Purchase",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white)),
+                ),
               ),
             ),
             const SizedBox(
@@ -85,18 +121,55 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
             ),
             const Padding(
               padding: EdgeInsets.only(left: 20),
-              child: Text("Daily Food: ", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black)),
+              child: Text("Daily Food: ",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black)),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(3, (index) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          indexClicked = index;
+                          setState(() {});
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: indexClicked == index
+                                ? Colors.greenAccent
+                                : Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: Text("${index + 1}"),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
               height: 200,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), image: DecorationImage(image: NetworkImage(widget.image), fit: BoxFit.cover)),
-            )
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.image), fit: BoxFit.cover)),
+            ),
           ],
         ),
       ),
@@ -108,11 +181,13 @@ Widget custombox(String title, Color color) {
   return Container(
     width: 120,
     height: 33,
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: color),
+    decoration:
+        BoxDecoration(borderRadius: BorderRadius.circular(8), color: color),
     child: Center(
       child: Text(
         title,
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
+        style: const TextStyle(
+            fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
       ),
     ),
   );

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
-import 'package:flutter_spinbox/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -129,8 +128,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: _image == null
-                                              ? const DecorationImage(image: AssetImage('asset/images/bmi.jpeg'))
-                                              : DecorationImage(image: FileImage(File(_image!.path)))),
+                                              ? const DecorationImage(
+                                                  image: AssetImage(
+                                                      'asset/images/bmi.jpeg'))
+                                              : DecorationImage(
+                                                  image: FileImage(
+                                                      File(_image!.path)))),
                                     ),
                                   ),
                                   Positioned(
@@ -144,7 +147,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       child: Container(
                                         width: 30,
                                         height: 30,
-                                        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle),
                                         child: const Icon(
                                           Icons.camera_alt,
                                           size: 18,
@@ -159,7 +164,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               Text(
                                 '${_auth.currentUser?.email}',
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white),
                               )
                             ],
                           ),
@@ -196,15 +204,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         },
                                         child: Container(
                                           height: 40,
-                                          width: MediaQuery.of(context).size.width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             color: Colors.red,
                                           ),
                                           child: const Center(
                                             child: Text(
                                               'Sign Out',
-                                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -214,15 +227,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ]),
                         ),
-                        Align(
+                        const Align(
                             alignment: FractionalOffset.bottomCenter,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
+                              padding: EdgeInsets.only(bottom: 30),
                               child: Column(
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Text(
                                     '@Copyright R@ Foogy',
-                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
                                   )
                                 ],
                               ),
@@ -243,7 +259,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                        tooltip: MaterialLocalizations.of(context)
+                            .openAppDrawerTooltip,
                       );
                     },
                   ),
@@ -255,7 +272,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           'This a snackbar with info type and a very very very long text',
                           type: AnimatedSnackBarType.info,
                           mobileSnackBarPosition: MobileSnackBarPosition.top,
-                          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+                          desktopSnackBarPosition:
+                              DesktopSnackBarPosition.topCenter,
                           snackBarStrategy: RemoveSnackBarStrategy(),
                         );
                         snackBar.show(context);
@@ -309,20 +327,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       Stack(
                         children: [
-                          SpinBox(
-                            value: 10,
-                            onChanged: (value) {
-                              age = value;
-                              debugPrint('===============$age');
-                            },
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                                labelText: 'Age',
-                                labelStyle: const TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 18,
-                                )),
-                          ),
+                          // SpinBox(
+                          //   value: 10,
+                          //   onChanged: (value) {
+                          //     age = value;
+                          //     debugPrint('===============$age');
+                          //   },
+                          //   decoration: InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(8)),
+                          //     labelText: 'Age',
+                          //     labelStyle: const TextStyle(
+                          //       fontWeight: FontWeight.w800,
+                          //       fontSize: 18,
+                          //     ),
+                          //   ),
+                          // ),
                           Center(
                             child: Container(
                               width: MediaQuery.of(context).size.width - 150,
@@ -335,20 +355,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text('Height(in cm)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const Text('Height(in cm)',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black)),
                       const SizedBox(
                         height: 15,
                       ),
                       Center(
                           child: Text('${height.toStringAsFixed(0)} cm',
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black))),
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black))),
                       const SizedBox(
                         height: 15,
                       ),
                       Container(
                         width: 400,
                         decoration: BoxDecoration(
-                            border: Border.all(width: 0.2, color: Colors.grey), borderRadius: BorderRadius.circular(10), color: Colors.white),
+                            border: Border.all(width: 0.2, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: RulerPicker(
                           controller: _rulerPickerController!,
                           onBuildRulerScaleText: (index, value) {
@@ -364,7 +393,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           },
                           width: MediaQuery.of(context).size.width,
                           height: 80,
-                          rulerScaleTextStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          rulerScaleTextStyle:
+                              const TextStyle(fontWeight: FontWeight.w600),
                           rulerMarginTop: 1,
                           // marker: Container(
                           //     width: 8,
@@ -375,13 +405,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text('Weight(in kg)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const Text('Weight(in kg)',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black)),
                       Expanded(
                         child: Center(
                           child: CircularSlider(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(200), boxShadow: const [
-                                BoxShadow(offset: Offset(-10, -10), color: Colors.white, blurRadius: 20, spreadRadius: 1),
-                              ]),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(200),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        offset: Offset(-10, -10),
+                                        color: Colors.white,
+                                        blurRadius: 20,
+                                        spreadRadius: 1),
+                                  ]),
                               maxValue: 100,
                               color: Colors.white,
                               onDrag: (int value) {
@@ -396,14 +436,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               unSelectedColor: Colors.grey,
                               child: Text(
                                 '$weight',
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w600),
                               )),
                         ),
                       ),
                       GestureDetector(
                         onTap: validation() == true
                             ? () {
-                                var userModel = UserModel(age: age, gender: gender, weight: weight, height: height, result: 0);
+                                var userModel = UserModel(
+                                    age: age,
+                                    gender: gender,
+                                    weight: weight,
+                                    height: height,
+                                    result: 0);
                                 transferdata.add(BMICalculatorEvent(userModel));
                               }
                             : () {},
@@ -412,11 +458,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 50,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: isValidate ? HexColor('#35D2E9') : Colors.grey),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: isValidate
+                                    ? HexColor('#35D2E9')
+                                    : Colors.grey),
                             child: const Center(
                                 child: Text(
                               'Calculate your BIM',
-                              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.white),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  color: Colors.white),
                             )),
                           ),
                         ),
@@ -456,7 +509,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
           color: HexColor('#F7F2EE'),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2, color: isClick ? HexColor('#35D2E9') : Colors.white),
+          border: Border.all(
+              width: 2, color: isClick ? HexColor('#35D2E9') : Colors.white),
           boxShadow: const [BoxShadow(blurRadius: 3, color: Colors.grey)]),
       child: Icon(
         url,
@@ -505,7 +559,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         builder: (builder) {
           return Container(
             decoration: const BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12))),
             height: MediaQuery.of(context).size.height * 0.2,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -521,18 +578,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Container(
                       width: double.infinity,
                       height: 60,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.grey.withOpacity(0.2)),
-                      child: const Center(child: Text('Select Image From Gallery', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600))),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.grey.withOpacity(0.2)),
+                      child: const Center(
+                          child: Text('Select Image From Gallery',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w600))),
                     ),
                   ),
                   Container(
                     width: double.infinity,
                     height: 60,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.grey.withOpacity(0.2)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey.withOpacity(0.2)),
                     child: const Center(
                         child: Text(
                       'Cancel',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     )),
                   )
                 ],
