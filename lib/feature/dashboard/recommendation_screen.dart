@@ -6,7 +6,7 @@ import 'package:online/util/app_util.dart';
 
 class RecommendationScreen extends StatefulWidget {
   final String statusType;
-  const RecommendationScreen(this.statusType, {super.key});
+  const RecommendationScreen({super.key, required this.statusType});
 
   @override
   State<RecommendationScreen> createState() => _RecommendationScreenState();
@@ -19,46 +19,36 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
       _selectedIndex = index;
     });
     if (_selectedIndex == 1) {
-      const PuchaseScreen(image: "");
-    }
-  }
-
-  CollectionReference foodCollection =
-      FirebaseFirestore.instance.collection('food');
-  final _auth = FirebaseAuth.instance;
-  Future<void> addFoodFireStore() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      await foodCollection.add({
-        "title": "KETO",
-        "subtile":
-            "The ketogenic (keto) diet is a high-fat, very low-carbohydrate, and moderate-protein diet.",
-        "image":
-            "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=861,h=600,fit=crop/AwvL7WbqRLHXekVz/keto-diet-foods-1-ALpX60x9bkIGbMow.webp"
-      });
+      const PuchaseScreen(
+        image: "",
+        status: '',
+        title: '',
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<QuerySnapshot>(
-          future: FirebaseFirestore.instance.collection('food').get(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              List<DocumentSnapshot> documents = snapshot.data!.docs;
-              return ListView.builder(
+      body: Stack(
+        children: [
+          FutureBuilder<QuerySnapshot>(
+            future: FirebaseFirestore.instance.collection('food').get(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                List<DocumentSnapshot> documents = snapshot.data!.docs;
+                return ListView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, index) {
                     Map<String, dynamic> data =
                         documents[index].data() as Map<String, dynamic>;
 
                     return Padding(
-                        padding: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: _selectedIndex != 1
                             ? GestureDetector(
                                 onTap: () {
@@ -66,6 +56,8 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => PuchaseScreen(
+                                              status: data['status'],
+                                              title: data['title'],
                                               image: data['image'])));
                                 },
                                 child: customeWidgetFoodContainer(
@@ -73,9 +65,13 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                                     subtitle: data['subtile'],
                                     title: data['title']))
                             : _widgetOptions.elementAt(_selectedIndex));
-                  });
-            }
-          }),
+                  },
+                );
+              }
+            },
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: HexColor("#4FC376"),
         items: const <BottomNavigationBarItem>[
@@ -101,12 +97,24 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
 }
 
 Widget customeWidgetFoodContainer(
-    {required String title, required String subtitle, required String image}) {
+    {required String title, String? subtitle, required String image}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          width: double.infinity,
+          height: 230,
+          decoration: BoxDecoration(
+              border: Border.all(width: 0.2, color: Colors.grey),
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover)),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         Text(
           title,
           style: const TextStyle(
@@ -116,7 +124,7 @@ Widget customeWidgetFoodContainer(
           height: 10,
         ),
         Text(
-          subtitle,
+          subtitle ?? "",
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
@@ -125,15 +133,6 @@ Widget customeWidgetFoodContainer(
         const SizedBox(
           height: 20,
         ),
-        Container(
-          width: double.infinity,
-          height: 230,
-          decoration: BoxDecoration(
-              border: Border.all(width: 0.2, color: Colors.grey),
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                  image: NetworkImage(image), fit: BoxFit.cover)),
-        )
       ],
     ),
   );

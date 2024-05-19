@@ -26,7 +26,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1, left: 10),
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.1, left: 10),
                 child: const Icon(
                   Icons.arrow_back_ios,
                   size: 20,
@@ -36,11 +37,15 @@ class _SuccessScreenState extends State<SuccessScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.035),
             child: const Center(
               child: Text(
                 "Karlory",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
               ),
             ),
           ),
@@ -53,18 +58,27 @@ class _SuccessScreenState extends State<SuccessScreen> {
             children: [
               const Text(
                 "Your BMI is ",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 3),
                 child: Text(
                   "${widget.result.toStringAsFixed(1)} ",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: HexColor("#4285F4")),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: HexColor("#4285F4")),
                 ),
               ),
               Text(
                 getConsideredText(),
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
             ],
           ),
@@ -73,7 +87,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
           ),
           const Text(
             "What is your Goal?",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
           ),
           const SizedBox(
             height: 30,
@@ -86,9 +101,15 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   padding: const EdgeInsets.only(bottom: 15),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendationScreen(title)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RecommendationScreen(
+                                      statusType: title,
+                                    )));
                       },
-                      child: customContainer(title, checkReccomendation(title))),
+                      child:
+                          customContainer(title, checkReccomendation(title))),
                 ));
           })
         ],
@@ -103,7 +124,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
         Container(
           width: double.infinity,
           height: 40,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5), color: Colors.white),
           child: Center(
             child: Text(
               title,
@@ -121,7 +143,9 @@ class _SuccessScreenState extends State<SuccessScreen> {
             right: 70,
             child: Container(
               height: 20,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: HexColor("#3AFC09")),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: HexColor("#3AFC09")),
               child: const Center(
                 child: Text("Recommendation"),
               ),
@@ -132,7 +156,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
   }
 
   bool checkReccomendation(String title) {
-    return widget.result <= 18.5 && title == "Lose Weight" || widget.result >= 25.0 && title == "Gain weight";
+    return widget.result <= 18.5 && title == "Lose Weight" ||
+        widget.result >= 25.0 && title == "Gain weight";
   }
 
   String getConsideredText() {

@@ -1,10 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:online/feature/dashboard/purhcase_information.dart';
 import 'package:online/util/app_util.dart';
 
+import 'recommendation_screen.dart';
+
 class PuchaseScreen extends StatefulWidget {
   final String image;
-  const PuchaseScreen({super.key, required this.image});
+  final String status;
+  final String title;
+  const PuchaseScreen(
+      {super.key,
+      required this.image,
+      required this.status,
+      required this.title});
 
   @override
   State<PuchaseScreen> createState() => _PuchaseScreenState();
@@ -17,6 +26,27 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
     "Protein   5g",
     "Fat   6g"
   ];
+  String mystatus = '';
+  @override
+  void initState() {
+    getStatus(widget.status);
+
+    super.initState();
+  }
+
+  String getStatus(String statusType) {
+    if (statusType == 'low') {
+      return mystatus = 'low-calories';
+    }
+    if (statusType == 'hight') {
+      return mystatus = 'hight-calories';
+    }
+    if (statusType == 'keto') {
+      return mystatus = 'keto';
+    }
+    return '';
+  }
+
   late int indexClicked = 0;
   @override
   Widget build(BuildContext context) {
@@ -89,8 +119,10 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            const PuchaseInformationScreen()));
+                        builder: (context) => PuchaseInformationScreen(
+                              image: widget.image,
+                              title: widget.title,
+                            )));
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -161,15 +193,12 @@ class _PuchaseScreenState extends State<PuchaseScreen> {
                 }),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: NetworkImage(widget.image), fit: BoxFit.cover)),
-            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: GetDetailItem(
+                statusType: mystatus,
+              ),
+            )
           ],
         ),
       ),
@@ -205,3 +234,49 @@ Color getColorGenerate(String title) {
   }
   return Colors.green;
 }
+
+class GetDetailItem extends StatefulWidget {
+  final String statusType;
+  const GetDetailItem({super.key, required this.statusType});
+
+  @override
+  State<GetDetailItem> createState() => _GetDetailItemState();
+}
+
+int _selectedIndex = 0;
+
+class _GetDetailItemState extends State<GetDetailItem> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection(widget.statusType).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<DocumentSnapshot> documents = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (context, index) {
+              Map<String, dynamic> data =
+                  documents[index].data() as Map<String, dynamic>;
+
+              return Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: _selectedIndex != 1
+                      ? GestureDetector(
+                          onTap: () {},
+                          child: customeWidgetFoodContainer(
+                              image: data['image'], title: data['title']))
+                      : _widgetOptions.elementAt(_selectedIndex));
+            },
+          );
+        }
+      },
+    );
+  }
+}
+
+const List<Widget> _widgetOptions = <Widget>[];

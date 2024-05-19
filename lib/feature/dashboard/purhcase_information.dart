@@ -4,7 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:online/feature/dashboard/checkout_screen.dart';
 
 class PuchaseInformationScreen extends StatefulWidget {
-  const PuchaseInformationScreen({super.key});
+  final String image;
+  final String title;
+  const PuchaseInformationScreen(
+      {super.key, required this.image, required this.title});
 
   @override
   State<PuchaseInformationScreen> createState() =>
@@ -48,10 +51,10 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Center(
+                  Center(
                     child: Text(
-                      'Intermittent Fasting 12:12 Package',
-                      style: TextStyle(
+                      widget.title,
+                      style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
@@ -231,7 +234,10 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CheckOutScreen()));
+                      builder: (context) => CheckOutScreen(
+                            image: widget.image,
+                            title: widget.title,
+                          )));
             },
             child: Container(
               margin: const EdgeInsets.all(16),
