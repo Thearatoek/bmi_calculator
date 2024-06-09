@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.online">
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
    <application
@@ -17,6 +18,8 @@
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
+
+
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
@@ -25,7 +28,31 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
+        <receiver android:name=".MyAppWidgetProvider"
+           android:exported="true"
+            tools:ignore="Instantiatable">
+           <intent-filter>
+               <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+           </intent-filter>
+           <meta-data android:name="android.appwidget.provider"
+               android:resource="@xml/widget_info" />
+        </receiver>
+        <receiver
+           android:name="es.antonborri.home_widget.HomeWidgetBackgroundReceiver"
+           android:exported="true">
+           <intent-filter>
+               <action android:name="es.antonborri.home_widget.action.BACKGROUND" />
+           </intent-filter>
+        </receiver>
+
+        <service
+           android:name="es.antonborri.home_widget.HomeWidgetBackgroundService"
+           android:exported="true"
+           android:permission="android.permission.BIND_JOB_SERVICE" />
+
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

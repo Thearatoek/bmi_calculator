@@ -9,6 +9,8 @@ package io.flutter.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.http.HttpResponseCache;
+
 import androidx.annotation.CallSuper;
 import androidx.multidex.MultiDex;
 
@@ -20,6 +22,7 @@ public class FlutterMultiDexApplication extends Application {
   @CallSuper
   protected void attachBaseContext(Context base) {
     super.attachBaseContext(base);
-    MultiDex.install(this);
+    HttpResponseCache MultiDex;
+
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online/feature/dashboard/recommendation_screen.dart';
+import 'package:online/mybloc/bloc_bloc.dart';
 import 'package:online/util/app_util.dart';
 
 class SuccessScreen extends StatefulWidget {
@@ -12,6 +14,16 @@ class SuccessScreen extends StatefulWidget {
 
 class _SuccessScreenState extends State<SuccessScreen> {
   final titleList = ["Lose Weight", "Gain weight", "Maintain Current Weight"];
+
+  String getStatus(String title) {
+    final statusMap = {
+      'Lose Weight': 'food',
+      'Gain weight': 'hight-calories',
+      'Maintain Current Weight': 'maintain-weight',
+    };
+
+    return statusMap[title] ?? ''; // null-aware operator for default value
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +113,17 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   padding: const EdgeInsets.only(bottom: 15),
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RecommendationScreen(
-                                      statusType: title,
-                                    )));
+                        getStatus(title);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => BlocBloc(),
+                              child: RecommendationScreen(
+                                statusType: getStatus(title),
+                              ),
+                            ),
+                          ),
+                        );
                       },
                       child:
                           customContainer(title, checkReccomendation(title))),

@@ -52,12 +52,15 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
                     height: 20,
                   ),
                   Center(
-                    child: Text(
-                      widget.title,
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                      ),
                     ),
                   ),
                   const SizedBox(

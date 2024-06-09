@@ -377,7 +377,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   title:
                       'After the payment, you can not cancel the order, Are you sure to continous the order?',
                   lottieBuilder: Lottie.asset(
-                    'asset/images/warning.json',
+                    'asset/images/logout.json',
                     repeat: false,
                     fit: BoxFit.contain,
                   ),

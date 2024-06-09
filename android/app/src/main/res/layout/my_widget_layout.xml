@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/please"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_default"
+    android:orientation="vertical"
+   >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/google_icon"
+        />
+    <Button
+        android:id="@+id/qr_btn_add_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ON-OFF"
+        android:textSize="16sp"
+        android:textColor="#C32B2A"
+        android:background="@null"
+        android:backgroundTint="@null"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:textAllCaps="false"
+
+        />
+
+
+
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Widget"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>

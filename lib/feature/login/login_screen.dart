@@ -8,6 +8,7 @@ import 'package:online/util/app_util.dart';
 import 'package:online/widget/custome_input.dart';
 
 import '../../widget/custom_button.dart';
+import '../dashboard/input_kilo_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,10 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
         appBar: AppBar(
           elevation: 0,
           leadingWidth: 200,
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0),
+          leading: const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.language,
                   size: 18,
@@ -45,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Text(
                   'En',
-                  style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.black),
                 )
               ],
             ),
@@ -58,9 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               MaterialPageRoute(
                 builder: (context) => BlocProvider(
                   create: (context) => BlocBloc(),
-                  child: const DashboardScreen(
-                    username: 'Eha',
-                  ),
+                  child: const InputUserKiloScreen(),
                 ),
               ),
             );
@@ -68,11 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is RegisterUserState) {
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) => BlocBloc(),
-                child: const DashboardScreen(
-                  username: 'Eha',
-                ),
-              ),
+                  create: (context) => BlocBloc(),
+                  child: const InputUserKiloScreen()),
             );
           }
         }, builder: (context, state) {
@@ -89,11 +86,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 isLogin
                     ? const Text(
                         "Login !",
-                        style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700),
                       )
                     : const Text(
                         "Create an account !",
-                        style: TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700),
                       ),
                 const SizedBox(
                   height: 10,
@@ -101,13 +104,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 isLogin
                     ? const Text(
                         "Sign in to Continous ",
-                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
                       )
                     : const Center(
                         child: Text(
                           "Please register your account",
                           maxLines: 2,
-                          style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
                         ),
                       ),
                 const SizedBox(
@@ -164,10 +173,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           isborder: isValidation,
                           onClick: validation() == false
                               ? () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                 }
                               : () {
-                                  var auth = AuthUser(email: _phoneController.text, password: _passwordController.text);
+                                  var auth = AuthUser(
+                                      email: _phoneController.text,
+                                      password: _passwordController.text);
 
                                   if (isLogin) {
                                     authUser.add(LoginEvent(auth));
@@ -200,7 +212,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool validation() {
-    bool valid = isValidation = _phoneController.text != '' && _passwordController.text != '';
+    bool valid = isValidation =
+        _phoneController.text != '' && _passwordController.text != '';
 
     return valid;
   }
