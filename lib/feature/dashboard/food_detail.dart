@@ -1,26 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:online/model/food_model.dart';
 import 'package:online/util/app_util.dart';
 
 import 'checkout_screen.dart';
 
 class FoodDetailScreen extends StatefulWidget {
-  final String image;
-  final String title;
-  final List<dynamic> detailFood;
-  final String description;
-  final List<dynamic> nutrition;
-  final String price;
-  final String status;
-  const FoodDetailScreen(
-      {super.key,
-      required this.image,
-      required this.detailFood,
-      required this.description,
-      required this.nutrition,
-      required this.title,
-      required this.status,
-      required this.price});
+  final FoodModel foodModel;
+  const FoodDetailScreen({super.key, required this.foodModel});
 
   @override
   State<FoodDetailScreen> createState() => _FoodDetailScreenState();
@@ -29,7 +15,7 @@ class FoodDetailScreen extends StatefulWidget {
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   void initState() {
-    debugPrint(widget.status);
+    debugPrint(widget.foodModel.status);
     super.initState();
   }
 
@@ -45,7 +31,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.3,
                 child: Image.network(
-                  widget.image,
+                  widget.foodModel.image ?? '',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -53,7 +39,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 left: 16,
                 bottom: 12,
                 child: Text(
-                  widget.title,
+                  widget.foodModel.title ?? '',
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -67,7 +53,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.status != 'food')
+                  if (widget.foodModel.status != 'food')
                     Center(
                       child: Column(
                         children: [
@@ -75,7 +61,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             height: 15,
                           ),
                           Text(
-                            widget.price,
+                            widget.foodModel.price ?? '',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
@@ -113,8 +99,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 CheckOutScreen(
-                                                  image: widget.image,
-                                                  title: widget.title,
+                                                  foodModel: widget.foodModel,
                                                 )));
                                   },
                                   child: Container(
@@ -150,7 +135,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
-                      widget.description,
+                      widget.foodModel.description ?? '',
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -181,8 +166,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         const SizedBox(
                           height: 15,
                         ),
-                        ...List.generate(widget.detailFood.length, (index) {
-                          final text = widget.detailFood[index];
+                        ...List.generate(widget.foodModel.ingredients!.length,
+                            (index) {
+                          final text = widget.foodModel.ingredients![index];
                           return Column(
                             children: [
                               Padding(
@@ -235,8 +221,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         const SizedBox(
                           height: 15,
                         ),
-                        ...List.generate(widget.nutrition.length, (index) {
-                          final text = widget.nutrition[index];
+                        ...List.generate(widget.foodModel.nutrition!.length,
+                            (index) {
+                          final text = widget.foodModel.nutrition![index];
                           return Column(
                             children: [
                               Padding(

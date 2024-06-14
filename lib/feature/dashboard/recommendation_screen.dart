@@ -8,8 +8,9 @@ import 'package:material_dialogs/material_dialogs.dart';
 import 'package:online/feature/dashboard/exercise_screen.dart';
 import 'package:online/feature/dashboard/food_detail.dart';
 import 'package:online/feature/dashboard/puchase_screen.dart';
-import 'package:online/feature/dashboard/purhcase_information.dart';
 import 'package:online/feature/login/login_screen.dart';
+import 'package:online/feature/util/app_connection.dart';
+import 'package:online/model/food_model.dart';
 import 'package:online/mybloc/bloc_bloc.dart';
 import 'package:online/util/app_util.dart';
 
@@ -82,14 +83,43 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   }
 }
 
-class HomeWidgetComponent extends StatelessWidget {
+List<FoodModel> listItem = [];
+
+class HomeWidgetComponent extends StatefulWidget {
   final String status;
   const HomeWidgetComponent({super.key, required this.status});
 
   @override
+  State<HomeWidgetComponent> createState() => _HomeWidgetComponentState();
+}
+
+class _HomeWidgetComponentState extends State<HomeWidgetComponent> {
+  @override
+  void initState() {
+    super.initState();
+    fetchFoodItems();
+  }
+
+  Future<List<FoodModel>> fetchFoodItems() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection(widget.status).get();
+      List<DocumentSnapshot> documents = querySnapshot.docs;
+      listItem = documents.map((doc) {
+        return FoodModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+      debugPrint(listItem[1].title);
+      return listItem;
+    } catch (e) {
+      print("Error fetching food items: $e");
+      return [];
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection(status).get(),
+      future: FirebaseFirestore.instance.collection(widget.status).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -102,43 +132,43 @@ class HomeWidgetComponent extends StatelessWidget {
             itemBuilder: (context, index) {
               Map<String, dynamic> data =
                   documents[index].data() as Map<String, dynamic>;
-
-              return Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (status != 'food') {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FoodDetailScreen(
-                                      image: data['image'],
-                                      detailFood: data['ingredients'],
-                                      description: data['description'],
-                                      nutrition: data['nutrition'],
-                                      title: data['title'],
-                                      status: status,
-                                      price: data['price'],
-                                    )));
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PurchaseScreen(
-                                      status: data['status'],
-                                      title: data['title'],
-                                      image: data['image'],
-                                      daily: data['daily'],
-                                      subitle: data['subtile'],
-                                      price: data['price'],
-                                    )));
-                      }
-                    },
-                    child: customeWidgetFoodContainer(
-                        subtitle: data['subtile'],
-                        title: data['title'],
-                        image: data['image']),
-                  ));
+              return GestureDetector(
+                onTap: () {
+                  if (widget.status != 'food') {
+                    final foodModel = FoodModel(
+                      image: data['image'],
+                      ingredients: data['ingredients'],
+                      description: data['description'],
+                      nutrition: data['nutrition'],
+                      title: data['title'],
+                      status: widget.status,
+                      price: data['price'],
+                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FoodDetailScreen(
+                                  foodModel: foodModel,
+                                )));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PurchaseScreen(
+                                  status: data['status'],
+                                  title: data['title'],
+                                  image: data['image'],
+                                  daily: data['daily'],
+                                  subitle: data['subtile'],
+                                  price: data['price'],
+                                )));
+                  }
+                },
+                child: customeWidgetFoodContainer(
+                    subtitle: data['subtile'],
+                    title: data['title'],
+                    image: data['image']),
+              );
             },
           );
         }
@@ -169,7 +199,7 @@ Widget customeWidgetFoodContainer(
         Text(
           title,
           style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+              fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
         ),
         const SizedBox(
           height: 10,
@@ -182,20 +212,188 @@ Widget customeWidgetFoodContainer(
               color: Colors.black.withOpacity(0.5)),
         ),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
       ],
     ),
   );
 }
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Text('Please search');
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = listItem;
   }
+
+  final TextEditingController _controller = TextEditingController();
+  List<FoodModel> filteredItems = [];
+  void filterSearchResults({required String query}) {
+    setState(() {
+      filteredItems = listItem
+          .where(
+              (item) => item.title!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Search Screen"),
+        backgroundColor: Colors.green,
+      ),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            width: double.infinity,
+            height: 45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                width: 1,
+                color: Colors.black.withOpacity(0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 20,
+                ),
+                const Icon(
+                  Icons.search,
+                  size: 25,
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintText: 'Search food',
+                      contentPadding: EdgeInsets.all(10.0),
+                    ),
+                    onChanged: (value) {
+                      filterSearchResults(query: value);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+              child: SingleChildScrollView(
+            child: Column(
+              children: filteredItems.isEmpty
+                  ? List.generate(
+                      listItem.length,
+                      (index) {
+                        final image = listItem[index].image;
+                        return _customFoodContainer(
+                            image: image ?? '',
+                            title: listItem[index].title ?? '',
+                            subitle: '');
+                      },
+                    )
+                  : List.generate(
+                      filteredItems.length,
+                      (index) {
+                        final image = filteredItems[index].image;
+                        return _customFoodContainer(
+                            image: image ?? '',
+                            title: filteredItems[index].title ?? '',
+                            subitle: '');
+                      },
+                    ),
+            ),
+          ))
+        ],
+      ),
+    );
+  }
+}
+
+Widget _customFoodContainer(
+    {required String image, required String title, required String subitle}) {
+  return Container(
+    margin: const EdgeInsets.all(12),
+    width: double.infinity,
+    height: 120,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.2), // Shadow color
+          blurRadius: 10.0, // Blur radius of the shadow (spread)
+          offset: const Offset(5.0, 5.0), // Displacement of the shadow (x, y)
+          spreadRadius:
+              2.0, // Optional: Extends the shadow beyond the offset (optional)
+        )
+      ],
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        const SizedBox(
+          width: 12,
+        ),
+        Container(
+          width: 120,
+          height: 90,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                  image: NetworkImage(image), fit: BoxFit.cover)),
+        ),
+        const SizedBox(
+          width: 12,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+              height: 8,
+            ),
+            SizedBox(
+              width: 200,
+              child: Text(
+                title,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black.withOpacity(0.5)),
+              ),
+            ),
+            Text(
+              subitle,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black.withOpacity(0.5)),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }
 
 class ProfileScreen extends StatefulWidget {

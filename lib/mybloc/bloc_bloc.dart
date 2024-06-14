@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'dart:math';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,10 +42,13 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
 //Declaration
   User? user;
   var auth = UserAuth();
-  CollectionReference collectionReference = FirebaseFirestore.instance.collection('client');
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection('client');
   // food collection
-  CollectionReference foodCollection = FirebaseFirestore.instance.collection('food');
-  CollectionReference userimage = FirebaseFirestore.instance.collection('user_image');
+  CollectionReference foodCollection =
+      FirebaseFirestore.instance.collection('food');
+  CollectionReference userimage =
+      FirebaseFirestore.instance.collection('user_image');
   final _auth = FirebaseAuth.instance;
   List<UserModel> data = [];
   String errorMessage = '';
@@ -78,7 +82,10 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
 //Loading data from firebase
   Future<void> _onLoadingDataFirebase(RecordedEvent event, emit) async {
     try {
-      final response = FirebaseFirestore.instance.collection('client').where('uid', isEqualTo: _auth.currentUser?.uid).get();
+      final response = FirebaseFirestore.instance
+          .collection('client')
+          .where('uid', isEqualTo: _auth.currentUser?.uid)
+          .get();
 
       await response.then((snapshot) {
         for (var document in snapshot.docs) {
@@ -95,7 +102,8 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
 // Register user in firebase
   Future<void> _onRegisterUser(RegisterUserEvent event, emit) async {
     try {
-      await auth.registerAccount('${event.authUser.email}', '${event.authUser.password}');
+      await auth.registerAccount(
+          '${event.authUser.email}', '${event.authUser.password}');
       print('user has success register');
       emit(RegisterUserState());
     } catch (e) {
@@ -145,7 +153,8 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
         "uid": uid,
         "title": "Type of Diet food",
         "subtile": "Please choose this food for eat",
-        "image": "https://cdn4.vectorstock.com/i/1000x1000/44/93/italian-cuisine-food-traditional-dishes-vector-18484493.jpg"
+        "image":
+            "https://cdn4.vectorstock.com/i/1000x1000/44/93/italian-cuisine-food-traditional-dishes-vector-18484493.jpg"
       });
     }
   }
@@ -175,7 +184,11 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
     double a = double.parse(event.usermodel!.height.toString()) / 100;
     result = (double.parse(event.usermodel!.weight.toString()) / pow(a, 2));
     var usermodel = UserModel(
-        result: result, age: event.usermodel?.age, height: event.usermodel?.height, weight: event.usermodel?.weight, gender: event.usermodel?.gender);
+        result: result,
+        age: event.usermodel?.age,
+        height: event.usermodel?.height,
+        weight: event.usermodel?.weight,
+        gender: event.usermodel?.gender);
     emit(BMICalculateState(userModel: usermodel));
   }
 
@@ -205,7 +218,8 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
       String collectionName = 'client';
 
       // Get a reference to the document
-      DocumentReference documentReference = FirebaseFirestore.instance.collection(collectionName).doc(itemId);
+      DocumentReference documentReference =
+          FirebaseFirestore.instance.collection(collectionName).doc(itemId);
 
       // Delete the document
       await documentReference.delete();

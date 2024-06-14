@@ -2,12 +2,11 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:online/feature/dashboard/checkout_screen.dart';
+import 'package:online/model/food_model.dart';
 
 class PuchaseInformationScreen extends StatefulWidget {
-  final String image;
-  final String title;
-  const PuchaseInformationScreen(
-      {super.key, required this.image, required this.title});
+  final FoodModel foodModel;
+  const PuchaseInformationScreen({super.key, required this.foodModel});
 
   @override
   State<PuchaseInformationScreen> createState() =>
@@ -55,7 +54,7 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        widget.title,
+                        widget.foodModel.title ?? '',
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -238,8 +237,7 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CheckOutScreen(
-                            image: widget.image,
-                            title: widget.title,
+                            foodModel: widget.foodModel,
                           )));
             },
             child: Container(

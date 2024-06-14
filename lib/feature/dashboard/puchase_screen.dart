@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online/feature/dashboard/food_detail.dart';
 import 'package:online/feature/dashboard/purhcase_information.dart';
+import 'package:online/model/food_model.dart';
 import 'package:online/util/app_util.dart';
 
 class PurchaseScreen extends StatefulWidget {
@@ -95,8 +96,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => PuchaseInformationScreen(
-                                    image: widget.image,
-                                    title: widget.subitle,
+                                    foodModel: FoodModel(
+                                        image: widget.image,
+                                        price: widget.price),
                                   )));
                     },
                   ),
@@ -342,17 +344,20 @@ class _GetDetailItemState extends State<GetDetailItem> {
           final nutrition = widget.item[index]['nutrition'];
           return GestureDetector(
             onTap: () {
+              final foodModel = FoodModel(
+                image: image,
+                ingredients: detailFood,
+                description: widget.item[index]['description'],
+                nutrition: nutrition,
+                title: widget.item[index]['title'],
+                price: widget.item[index]['price'] ?? '',
+                status: 'food',
+              );
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FoodDetailScreen(
-                            image: image,
-                            detailFood: detailFood,
-                            description: widget.item[index]['description'],
-                            nutrition: nutrition,
-                            title: widget.item[index]['title'],
-                            price: widget.item[index]['price'],
-                            status: 'food',
+                            foodModel: foodModel,
                           )));
             },
             child: customeWidgetFoodContainer(

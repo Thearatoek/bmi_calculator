@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/material_dialogs.dart';
+import 'package:online/model/food_model.dart';
 
 import '../../util/app_util.dart';
 
 class CheckOutScreen extends StatefulWidget {
-  final String image;
-  final String title;
-  const CheckOutScreen({super.key, required this.image, required this.title});
+  final FoodModel foodModel;
+  const CheckOutScreen({super.key, required this.foodModel});
 
   @override
   State<CheckOutScreen> createState() => _CheckOutScreenState();
@@ -15,6 +15,8 @@ class CheckOutScreen extends StatefulWidget {
 
 final cardNumberController = TextEditingController();
 final fullnameController = TextEditingController();
+final cvcController = TextEditingController();
+final mvmController = TextEditingController();
 final List<String> cardInfo = ['CVV', 'MM/YY'];
 final List<TextEditingController> controller = [];
 
@@ -45,7 +47,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.27,
                     child: Image.network(
-                      widget.image,
+                      widget.foodModel.image ?? '',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -53,7 +55,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     height: 20,
                   ),
                   Text(
-                    widget.title,
+                    widget.foodModel.title ?? '',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
@@ -64,7 +66,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     height: 20,
                   ),
                   Text(
-                    "\$20.00",
+                    widget.foodModel.price ?? '',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
