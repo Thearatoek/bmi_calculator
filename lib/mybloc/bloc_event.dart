@@ -34,8 +34,8 @@ class BMIUpdateEvent extends BlocEvent {
 class BMIthearaEvent extends BlocEvent {}
 
 class BMIStoreEvent extends BlocEvent {
-  final UserModel userModel;
-  BMIStoreEvent(this.userModel);
+  final FoodModel foodModel;
+  BMIStoreEvent(this.foodModel);
 }
 
 class RecordedEvent extends BlocEvent {}

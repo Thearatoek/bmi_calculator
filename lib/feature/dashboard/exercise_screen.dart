@@ -23,32 +23,32 @@ class ExerciseScreen extends StatelessWidget {
                 title: 'Running',
                 calories: '250 cals'),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
             _customItemWidget(
                 imgage: 'asset/images/walk.png',
-                title: 'Running',
+                title: 'Waking',
                 calories: '250 cals'),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
             _customItemWidget(
                 imgage: 'asset/images/bike.png',
-                title: 'Running',
+                title: 'Bike',
                 calories: '250 cals'),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
             _customItemWidget(
                 imgage: 'asset/images/swim.png',
-                title: 'Running',
+                title: 'Swimming',
                 calories: '250 cals'),
             const SizedBox(
-              height: 20,
+              height: 25,
             ),
             _customItemWidget(
                 imgage: 'asset/images/jump.png',
-                title: 'Running',
+                title: 'Jumping',
                 calories: '250 cals')
           ],
         ),
@@ -65,8 +65,10 @@ Widget _customItemWidget(
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(imgage), fit: BoxFit.cover)),
+            shape: BoxShape.circle,
+            color: Colors.white.withOpacity(0.9),
+            image: DecorationImage(
+                image: AssetImage(imgage), fit: BoxFit.contain)),
       ),
       const SizedBox(
         width: 20,

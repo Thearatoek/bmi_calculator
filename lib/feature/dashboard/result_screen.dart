@@ -62,7 +62,9 @@ class _ResultScreenState extends State<ResultScreen> {
             },
             child: Scaffold(
                 appBar: AppBar(
-                  systemOverlayStyle: const SystemUiOverlayStyle(systemNavigationBarColor: Colors.black, statusBarColor: Colors.black),
+                  systemOverlayStyle: const SystemUiOverlayStyle(
+                      systemNavigationBarColor: Colors.black,
+                      statusBarColor: Colors.black),
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   leading: GestureDetector(
@@ -78,7 +80,10 @@ class _ResultScreenState extends State<ResultScreen> {
                   centerTitle: true,
                   title: const Text(
                     "BMI Result",
-                    style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 body: BlocConsumer<BlocBloc, BlocState>(
@@ -101,7 +106,8 @@ class _ResultScreenState extends State<ResultScreen> {
                         width: double.infinity,
                         height: double.infinity,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,21 +119,33 @@ class _ResultScreenState extends State<ResultScreen> {
                                   value: widget.usermodel.result,
                                 ),
                               ),
-                              Text(status, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+                              Text(status,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black)),
                               Padding(
                                 padding: const EdgeInsets.only(top: 20),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 60,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: HexColor('#CCF4F8')),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: HexColor('#CCF4F8')),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [const Text('Age'), Text('${widget.usermodel.age}')],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Age'),
+                                            Text('${widget.usermodel.age}')
+                                          ],
                                         ),
                                         Container(
                                           width: 1,
@@ -135,8 +153,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                           color: Colors.grey,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [const Text('Weight'), Text(widget.usermodel.weight!.toStringAsFixed(0))],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Weight'),
+                                            Text(widget.usermodel.weight!
+                                                .toStringAsFixed(0))
+                                          ],
                                         ),
                                         Container(
                                           width: 1,
@@ -144,8 +167,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                           color: Colors.grey,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [const Text('Height'), Text(widget.usermodel.height!.toStringAsFixed(0))],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Height'),
+                                            Text(widget.usermodel.height!
+                                                .toStringAsFixed(0))
+                                          ],
                                         )
                                       ],
                                     ),
@@ -169,21 +197,28 @@ class _ResultScreenState extends State<ResultScreen> {
                                         actions: [
                                           GestureDetector(
                                             onTap: () {
-                                              submitInfo.add(BMIStoreEvent(widget.usermodel));
+                                              // submitInfo.add(BMIStoreEvent(widget.usermodel));
                                               submitInfo.add(RecordedEvent());
                                               Navigator.pop(context);
                                             },
                                             child: Container(
                                               height: 40,
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                                 color: Colors.green,
                                               ),
                                               child: const Center(
                                                 child: Text(
                                                   'Save and View History',
-                                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.white),
                                                 ),
                                               ),
                                             ),
@@ -193,11 +228,16 @@ class _ResultScreenState extends State<ResultScreen> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 50,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: HexColor('#35D2E9')),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: HexColor('#35D2E9')),
                                     child: const Center(
                                         child: Text(
                                       'Save it',
-                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                          color: Colors.black),
                                     )),
                                   ),
                                 ),

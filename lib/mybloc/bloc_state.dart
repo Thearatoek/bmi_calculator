@@ -23,8 +23,8 @@ class BMIUpdateState extends BlocState {
 }
 
 class BMIStoreDataState extends BlocState {
-  final UserModel userModel;
-  BMIStoreDataState(this.userModel);
+  final FoodModel foodModel;
+  BMIStoreDataState(this.foodModel);
 }
 
 class RegisterUserState extends BlocState {}

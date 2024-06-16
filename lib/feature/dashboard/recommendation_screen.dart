@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:online/feature/dashboard/exercise_screen.dart';
 import 'package:online/feature/dashboard/food_detail.dart';
+import 'package:online/feature/dashboard/histories_screen.dart';
 import 'package:online/feature/dashboard/puchase_screen.dart';
 import 'package:online/feature/login/login_screen.dart';
-import 'package:online/feature/util/app_connection.dart';
 import 'package:online/model/food_model.dart';
 import 'package:online/mybloc/bloc_bloc.dart';
 import 'package:online/util/app_util.dart';
@@ -111,7 +112,6 @@ class _HomeWidgetComponentState extends State<HomeWidgetComponent> {
       debugPrint(listItem[1].title);
       return listItem;
     } catch (e) {
-      print("Error fetching food items: $e");
       return [];
     }
   }
@@ -155,12 +155,13 @@ class _HomeWidgetComponentState extends State<HomeWidgetComponent> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => PurchaseScreen(
-                                  status: data['status'],
-                                  title: data['title'],
-                                  image: data['image'],
-                                  daily: data['daily'],
-                                  subitle: data['subtile'],
-                                  price: data['price'],
+                                  foodModel: FoodModel(
+                                    status: data['status'],
+                                    title: data['title'],
+                                    image: data['image'],
+                                    daily: data['daily'],
+                                    price: data['price'],
+                                  ),
                                 )));
                   }
                 },
@@ -304,20 +305,59 @@ class _SearchScreenState extends State<SearchScreen> {
                       listItem.length,
                       (index) {
                         final image = listItem[index].image;
-                        return _customFoodContainer(
-                            image: image ?? '',
-                            title: listItem[index].title ?? '',
-                            subitle: '');
+                        final dataList = listItem[index];
+                        return GestureDetector(
+                          onTap: () {
+                            final foodModel = FoodModel(
+                                image: dataList.image,
+                                title: dataList.title,
+                                nutrition: dataList.nutrition,
+                                daily: dataList.daily,
+                                description: dataList.description,
+                                price: dataList.price,
+                                status: dataList.status);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FoodDetailScreen(
+                                          foodModel: foodModel,
+                                        )));
+                          },
+                          child: _customFoodContainer(
+                              image: image ?? '',
+                              title: listItem[index].title ?? '',
+                              subitle: ''),
+                        );
                       },
                     )
                   : List.generate(
                       filteredItems.length,
                       (index) {
                         final image = filteredItems[index].image;
-                        return _customFoodContainer(
-                            image: image ?? '',
-                            title: filteredItems[index].title ?? '',
-                            subitle: '');
+                        final filterList = filteredItems[index];
+                        return GestureDetector(
+                          onTap: () {
+                            debugPrint(filterList.status);
+                            final foodModel = FoodModel(
+                                image: filterList.image,
+                                title: filterList.title,
+                                nutrition: filterList.nutrition,
+                                daily: filterList.daily,
+                                description: filterList.description,
+                                price: filterList.price,
+                                status: filterList.status);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FoodDetailScreen(
+                                          foodModel: foodModel,
+                                        )));
+                          },
+                          child: _customFoodContainer(
+                              image: image ?? '',
+                              title: filteredItems[index].title ?? '',
+                              subitle: ''),
+                        );
                       },
                     ),
             ),
@@ -435,136 +475,150 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
     }, child: BlocBuilder<BlocBloc, BlocState>(builder: ((context, state) {
-      return SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              /// -- IMAGE
-              Stack(
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                            image: AssetImage('asset/images/bmi.jpeg'))),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
+      return Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                /// -- IMAGE
+                Stack(
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          color: Colors.white),
-                      child: const Icon(
-                        LineAwesomeIcons.alternate_pencil,
-                        color: Colors.black,
-                        size: 20,
+                          child: const Image(
+                              image: AssetImage('asset/images/bmi.jpeg'))),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.white),
+                        child: const Icon(
+                          LineAwesomeIcons.alternate_pencil,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              /// -- BUTTON
+                /// -- BUTTON
 
-              const SizedBox(height: 30),
-              const Divider(),
-              const SizedBox(height: 10),
+                const SizedBox(height: 30),
+                const Divider(),
+                const SizedBox(height: 10),
 
-              /// -- MENU
-              ProfileMenuWidget(
-                title: "Name",
-                icon: LineAwesomeIcons.user,
-                onPress: () {},
-                subitle: '${_user!.email?.replaceAll('@gmail.com', '')}',
-              ),
-              ProfileMenuWidget(
-                title: "Username",
-                icon: LineAwesomeIcons.user_check,
-                onPress: () {},
-                subitle: '@${_user!.email?.replaceAll('@gmail.com', '')}',
-              ),
-              ProfileMenuWidget(
-                title: "Email",
-                icon: LineAwesomeIcons.mail_bulk,
-                onPress: () {},
-                subitle: '${_user!.email}',
-              ),
-              const Divider(),
-              const SizedBox(height: 10),
+                /// -- MENU
+                ProfileMenuWidget(
+                  title: "Name",
+                  icon: LineAwesomeIcons.user,
+                  onPress: () {},
+                  subitle: '${_user!.email?.replaceAll('@gmail.com', '')}',
+                ),
+                ProfileMenuWidget(
+                  title: "Username",
+                  icon: LineAwesomeIcons.user_check,
+                  onPress: () {},
+                  subitle: '@${_user!.email?.replaceAll('@gmail.com', '')}',
+                ),
+                ProfileMenuWidget(
+                  title: "Email",
+                  icon: LineAwesomeIcons.mail_bulk,
+                  onPress: () {},
+                  subitle: '${_user!.email}',
+                ),
+                ProfileMenuWidget(
+                  title: "History",
+                  icon: LineAwesomeIcons.history,
+                  onPress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyHistoryScreen()));
+                  },
+                  subitle: 'View history',
+                ),
+                const Divider(),
+                const SizedBox(height: 10),
 
-              ProfileMenuWidget(
-                title: "Logout",
-                icon: LineAwesomeIcons.alternate_sign_out,
-                textColor: Colors.red,
-                endIcon: false,
-                onPress: () {
-                  Dialogs.materialDialog(
-                      barrierDismissible: true,
-                      color: Colors.white,
-                      titleAlign: TextAlign.center,
-                      title: 'Are you sure to log out?',
-                      lottieBuilder: Lottie.asset(
-                        'asset/images/logout.json',
-                        repeat: false,
-                        fit: BoxFit.contain,
-                      ),
-                      context: context,
-                      actions: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width / 2,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
+                ProfileMenuWidget(
+                  title: "Logout",
+                  icon: LineAwesomeIcons.alternate_sign_out,
+                  textColor: Colors.red,
+                  endIcon: false,
+                  onPress: () {
+                    Dialogs.materialDialog(
+                        barrierDismissible: true,
+                        color: Colors.white,
+                        titleAlign: TextAlign.center,
+                        title: 'Are you sure to log out?',
+                        lottieBuilder: Lottie.asset(
+                          'asset/images/logout.json',
+                          repeat: false,
+                          fit: BoxFit.contain,
+                        ),
+                        context: context,
+                        actions: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 40,
+                              width: MediaQuery.of(context).size.width / 2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            bloc.add(SignOutEvent());
-                          },
-                          child: Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width / 2,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.green,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Log out',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
+                          GestureDetector(
+                            onTap: () async {
+                              bloc.add(SignOutEvent());
+                            },
+                            child: Container(
+                              height: 40,
+                              width: MediaQuery.of(context).size.width / 2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.green,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Log out',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ]);
-                },
-                subitle: '',
-              ),
-            ],
+                          )
+                        ]);
+                  },
+                  subitle: '',
+                ),
+              ],
+            ),
           ),
         ),
       );

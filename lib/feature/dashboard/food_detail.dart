@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:online/model/food_model.dart';
+import 'package:online/mybloc/bloc_bloc.dart';
 import 'package:online/util/app_util.dart';
 
 import 'checkout_screen.dart';
@@ -17,6 +19,20 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   void initState() {
     debugPrint(widget.foodModel.status);
     super.initState();
+  }
+
+  double _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _descrease() {
+    setState(() {
+      _counter--;
+    });
   }
 
   @override
@@ -76,31 +92,45 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Icon(
-                                  Icons.remove_circle,
-                                  size: 30,
+                                GestureDetector(
+                                  onTap: (() {
+                                    _descrease();
+                                  }),
+                                  child: const Icon(
+                                    Icons.remove_circle,
+                                    size: 30,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Text('1'),
+                                Text(_counter.toString()),
                                 const SizedBox(
                                   width: 15,
-                                ),
-                                const Icon(
-                                  Icons.add_circle,
-                                  color: Colors.green,
-                                  size: 30,
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CheckOutScreen(
-                                                  foodModel: widget.foodModel,
-                                                )));
+                                    _incrementCounter();
+                                    print("=========== $_counter");
+                                  },
+                                  child: const Icon(
+                                    Icons.add_circle,
+                                    color: Colors.green,
+                                    size: 30,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider(
+                                            create: (context) => BlocBloc(),
+                                            child: CheckOutScreen(
+                                              foodModel: widget.foodModel,
+                                              nubmerofUnit: _counter,
+                                            )),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.symmetric(
@@ -166,8 +196,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                         const SizedBox(
                           height: 15,
                         ),
-                        ...List.generate(widget.foodModel.ingredients!.length,
-                            (index) {
+                        ...List.generate(
+                            widget.foodModel.ingredients?.length ?? 0, (index) {
                           final text = widget.foodModel.ingredients![index];
                           return Column(
                             children: [

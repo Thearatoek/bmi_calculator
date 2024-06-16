@@ -1,8 +1,11 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:online/feature/dashboard/checkout_screen.dart';
 import 'package:online/model/food_model.dart';
+
+import '../../mybloc/bloc_bloc.dart';
 
 class PuchaseInformationScreen extends StatefulWidget {
   final FoodModel foodModel;
@@ -20,8 +23,8 @@ String firstDate = '';
 String lastDate = '';
 
 class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
-  final List<int> amountofDays = [3, 6, 9, 12, 15, 30];
-  late int amountDaySelected = 0;
+  final List<double> amountofDays = [3, 6, 9, 12, 15, 30];
+  late double amountDaySelected = 0;
   late String formattedDate = '';
   String elementDate = '';
   @override
@@ -124,7 +127,7 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(amountofDays.length, (index) {
-                          final int amounts = amountofDays[index];
+                          final double amounts = amountofDays[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
@@ -233,12 +236,16 @@ class _PuchaseInformationScreenState extends State<PuchaseInformationScreen> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CheckOutScreen(
-                            foodModel: widget.foodModel,
-                          )));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                      create: (context) => BlocBloc(),
+                      child: CheckOutScreen(
+                        foodModel: widget.foodModel,
+                        nubmerofUnit: amountDaySelected / 3,
+                      )),
+                ),
+              );
             },
             child: Container(
               margin: const EdgeInsets.all(16),

@@ -5,22 +5,9 @@ import 'package:online/model/food_model.dart';
 import 'package:online/util/app_util.dart';
 
 class PurchaseScreen extends StatefulWidget {
-  final String image;
-  final String status;
-  final String title;
-  final String subitle;
-  final String price;
-  final Map<String, dynamic> daily;
+  final FoodModel foodModel;
 
-  const PurchaseScreen({
-    super.key,
-    required this.image,
-    required this.status,
-    required this.title,
-    required this.daily,
-    required this.subitle,
-    required this.price,
-  });
+  const PurchaseScreen({super.key, required this.foodModel});
 
   @override
   State<PurchaseScreen> createState() => _PurchaseScreenState();
@@ -39,8 +26,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
   @override
   void initState() {
     super.initState();
-    status = widget.status;
-    items = widget.daily['day1'];
+    status = widget.foodModel.status ?? '';
+    items = widget.foodModel.daily!['day1'];
     indexClicked = 0;
   }
 
@@ -51,7 +38,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
-            widget.image,
+            widget.foodModel.image ?? '',
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.3,
             fit: BoxFit.cover,
@@ -86,7 +73,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   ),
                   const SizedBox(height: 20),
                   PriceSection(
-                    price: widget.price,
+                    price: widget.foodModel.price ?? '',
                   ),
                   const SizedBox(height: 30),
                   PurchaseButton(
@@ -96,10 +83,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => PuchaseInformationScreen(
-                                    foodModel: FoodModel(
-                                        image: widget.image,
-                                        price: widget.price),
-                                  )));
+                                  foodModel: widget.foodModel)));
                     },
                   ),
                   const Divider(thickness: 0.5),
@@ -116,7 +100,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     height: 15,
                   ),
                   GetDetailItem(
-                    item: widget.daily['day$selectIndex'] ?? [],
+                    item: widget.foodModel.daily?['day$selectIndex'] ?? [],
                   ),
                 ],
               ),

@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:online/feature/auth_provider/authetication.dart';
 import 'package:online/model/auth_model.dart';
+import 'package:online/model/food_model.dart';
 import 'package:online/model/user_model.dart';
 
 part 'bloc_event.dart';
@@ -44,6 +45,8 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
   var auth = UserAuth();
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('client');
+  CollectionReference prochase =
+      FirebaseFirestore.instance.collection('pruchase-data');
   // food collection
   CollectionReference foodCollection =
       FirebaseFirestore.instance.collection('food');
@@ -113,31 +116,24 @@ class BlocBloc extends Bloc<BlocEvent, BlocState> {
 
 // post data to store in cloud firebase
   void _onStoreData(BMIStoreEvent event, emit) {
-    var usermodel = UserModel(
-        result: event.userModel.result,
-        weight: event.userModel.weight,
-        height: event.userModel.height,
-        gender: event.userModel.gender,
-        age: event.userModel.age);
-    postToFirestore(usermodel);
+    postToFirestore(event.foodModel);
 
-    emit(BMIStoreDataState(usermodel));
+    emit(BMIStoreDataState(event.foodModel));
   }
 
 // Function post data to cloud
-  Future<void> postToFirestore(UserModel userModel) async {
+  Future<void> postToFirestore(FoodModel foodModel) async {
     User? user = _auth.currentUser;
     try {
       if (user != null) {
         String uid = user.uid;
 
-        await collectionReference.add({
+        await prochase.add({
           'uid': uid,
-          'age': userModel.age,
-          'weight': userModel.weight,
-          'height': userModel.height,
-          'result': userModel.result,
-          'gender': userModel.gender
+          'description': foodModel.description,
+          'image': foodModel.image,
+          'price': foodModel.price,
+          'title': foodModel.title,
         });
       } else {}
     } catch (e) {
