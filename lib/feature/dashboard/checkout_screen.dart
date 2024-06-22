@@ -29,7 +29,7 @@ final fullnameController = TextEditingController();
 final cvcController = TextEditingController();
 final mvmController = TextEditingController();
 final List<String> cardInfo = ['CVV', 'MM/YY'];
-final List<TextEditingController> controller = [];
+final List<TextEditingController> _controller = [cvcController, mvmController];
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
@@ -269,7 +269,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               ),
                             ),
                             const Icon(
-                              Icons.check_circle_sharp,
+                              Icons.radio_button_unchecked,
                               color: Colors.green,
                             )
                           ],
@@ -382,7 +382,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 30),
                                   child: TextField(
-                                    controller: fullnameController,
+                                    controller: _controller[index],
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                         hintText: hintText,

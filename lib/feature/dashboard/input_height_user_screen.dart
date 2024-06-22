@@ -48,7 +48,7 @@ class _InputUserHeightScreenState extends State<InputUserHeightScreen> {
                           description: '',
                           kilogramm: widget.kilogramm,
                           title: 'What is your bithday?',
-                          hintText: 'DD / MM / YY',
+                          hintText: 'DD / MM / YYYY',
                           height: double.parse(controller.text),
                         ))));
           },
